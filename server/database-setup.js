@@ -4,7 +4,7 @@ const dataPopulators = require("./seed-data");
 // set this flag to recreate the models and reseed the DB
 const FORCE_RECREATE_MODELS = true;
 
-const database = new Sequelize("memory_challenge", "root", "", {
+const database = new Sequelize("memory_challenge", "root", "adminadmin", {
   host: "localhost",
   dialect: "mysql",
   // dialect: "sqlite",
@@ -14,7 +14,7 @@ const database = new Sequelize("memory_challenge", "root", "", {
 });
 
 // Model definition
-const Hello = database.define("hello", {
+/* const Hello = database.define("hello", {
   name: Sequelize.STRING,
   foo: Sequelize.JSON,
 });
@@ -22,7 +22,7 @@ const Hello = database.define("hello", {
 const Hello2 = database.define("hello_2", {
   name: Sequelize.STRING,
   bar: Sequelize.JSON,
-});
+}); */
 
 // establish a link between the two entities
 Hello.hasOne(Hello2);

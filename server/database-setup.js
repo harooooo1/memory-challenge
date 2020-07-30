@@ -14,7 +14,7 @@ const database = new Sequelize("memory_challenge", "root", "adminadmin", {
 });
 
 // Model definition
-/* const Hello = database.define("hello", {
+/* const Hello = database.define("users", {
   name: Sequelize.STRING,
   foo: Sequelize.JSON,
 });
@@ -25,11 +25,11 @@ const Hello2 = database.define("hello_2", {
 }); */
 
 // establish a link between the two entities
-Hello.hasOne(Hello2);
-Hello2.belongsTo(Hello);
+//Hello.hasOne(Hello2);
+//Hello2.belongsTo(Hello);
 
 // INIT DB ENTITY MODELS
-(async function () {
+/*(async function () {
   // Drop tables in order to avoid foreign key constraint issues
   if (FORCE_RECREATE_MODELS) {
     Hello2.drop(); // Hello has a foreign key referencing Hello
@@ -49,3 +49,4 @@ Hello2.belongsTo(Hello);
 module.exports.Hello = Hello;
 module.exports.Hello2 = Hello2;
 module.exports.database = database;
+*/

@@ -4,7 +4,7 @@ const dataPopulators = require("./seed-data");
 // set this flag to recreate the models and reseed the DB
 const FORCE_RECREATE_MODELS = true;
 
-const database = new Sequelize("memory_challenge", "root", "adminadmin", {
+const memory_challenge = new Sequelize("memory_challenge", "root", "adminadmin", {
   host: "localhost",
   dialect: "mysql",
   // dialect: "sqlite",
@@ -14,7 +14,7 @@ const database = new Sequelize("memory_challenge", "root", "adminadmin", {
 });
 
 // Model definition
- const User = database.define("User", {
+ const User = memory_challenge.define("User", {
   id: Sequelize.INTEGER,
   username: Sequelize.STRING,
   firstname: Sequelize.STRING,
@@ -26,7 +26,7 @@ const database = new Sequelize("memory_challenge", "root", "adminadmin", {
   foo: Sequelize.JSON,
 });
 
-const Game = database.define("Game", {
+const Game = memory_challenge.define("Game", {
   id: Sequelize.INTEGER,
   //FK
   hostname: {
@@ -45,7 +45,7 @@ const Game = database.define("Game", {
 
 }); 
 
-const Player = database.define("Player", {
+const Player = memory_challenge.define("Player", {
   id: {
     type: Sequelize.INTEGER,
     references: {
@@ -106,4 +106,4 @@ Player.belongsTo(User);
 
 //module.exports.Hello = Hello;
 //module.exports.Hello2 = Hello2;
-module.exports.database = database;
+module.exports.memory_challenge = memory_challenge;

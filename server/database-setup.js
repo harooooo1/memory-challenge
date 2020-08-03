@@ -89,20 +89,21 @@ Player.belongsTo(User);
 (async function () {
   // Drop tables in order to avoid foreign key constraint issues
   if (FORCE_RECREATE_MODELS) {
-    Hello2.drop(); // Hello has a foreign key referencing Hello
-    Hello.drop();
+    User.drop(); // Hello has a foreign key referencing Hello
+    Game.drop();
+    Player.drop();
   }
   // Sync models
-  await Hello.sync({ force: FORCE_RECREATE_MODELS });
-  await Hello2.sync({ force: FORCE_RECREATE_MODELS });
-
+  await User.sync({ force: FORCE_RECREATE_MODELS });
+  await Game.sync({ force: FORCE_RECREATE_MODELS });
+  await Player.sync({ force: FORCE_RECREATE_MODELS });
   // repopulate the db with predefined data
   if (FORCE_RECREATE_MODELS) {
-    dataPopulators.mockHelloData(Hello);
-    dataPopulators.mockHello2Data(Hello2);
+  //  dataPopulators.mockHelloData(Hello);
+  //  dataPopulators.mockHello2Data(Hello2);
   }
 })();
 
-module.exports.Hello = Hello;
-module.exports.Hello2 = Hello2;
+//module.exports.Hello = Hello;
+//module.exports.Hello2 = Hello2;
 module.exports.database = database;

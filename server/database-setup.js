@@ -15,60 +15,32 @@ const memory_challenge = new Sequelize("memory_challenge", "root", "adminadmin",
 
 // Model definition
  const User = memory_challenge.define("User", {
-  id: Sequelize.INTEGER,
+  id: { 
+    type: Sequelize.INTEGER, primaryKey: true },
   username: Sequelize.STRING,
   firstname: Sequelize.STRING,
   lastname: Sequelize.STRING,
   email: Sequelize.STRING,
   password: Sequelize.STRING,
   totalwins: Sequelize.INTEGER,
-  banned: Sequelize.TINYINT,
-  foo: Sequelize.JSON,
+  banned: Sequelize.TINYINT, // 0 or 1
 });
 
 const Game = memory_challenge.define("Game", {
-  id: Sequelize.INTEGER,
+  id: { 
+    type: Sequelize.INTEGER, primaryKey: true },
   //FK
-  hostname: {
-    type: Sequelize.STRING,
-    references: {
-       model: 'User', // from which table the FK is pulled from
-       key: 'username', // which column
-    }
-  },
   gamename: Sequelize.STRING,
   current_players: Sequelize.INTEGER, //current players
   max_players: Sequelize.INTEGER,     //max players
-  state: Sequelize.STRING,
-  start_time: Sequelize.STRING,
+  state: Sequelize.TINYINT,
+  start_time: Sequelize.TIME,
   winner: Sequelize.STRING, // data about who won the game, need to find a way to return this value to this table after a game ends
 
 }); 
 
 const Player = memory_challenge.define("Player", {
-  id: {
-    type: Sequelize.INTEGER,
-    references: {
-       model: 'User', // from which table the FK is pulled from
-       key: 'id', // which column
-    }
-  },
 
-
-  game_id: {
-    type: Sequelize.INTEGER,
-    references: {
-       model: 'Game', // from which table the FK is pulled from
-       key: 'id', // which column
-    }
-  },
-  username: {
-    type: Sequelize.STRING,
-    references: {
-       model: 'User', // from which table the FK is pulled from
-       key: 'username', // which column
-    }
-  },
   player_number: Sequelize.INTEGER, //players number inside the game (example: player1, player2 etc....)
   clicks: Sequelize.INTEGER,     // number of times you clicked on a card to reveal it
   pairs: Sequelize.INTEGER,      // number of succesfully matched pairs
@@ -81,9 +53,9 @@ const Player = memory_challenge.define("Player", {
 //Hello2.belongsTo(Hello);
 
 User.hasMany(Game);
-Game.hasMany(Player);
-User.hasOne(Player);
-Player.belongsTo(User);
+User.belongsToMany(Game, { through: Player });
+Game.belongsToMany(User, { through: Player });
+//Project.belongsToMany(User, { through: UserProjects });
 
 // INIT DB ENTITY MODELS
 (async function () {
@@ -106,4 +78,7 @@ Player.belongsTo(User);
 
 //module.exports.Hello = Hello;
 //module.exports.Hello2 = Hello2;
+module.exports.User = User;
+module.exports.Game = Game;
+module.exports.Player = Player;
 module.exports.memory_challenge = memory_challenge;

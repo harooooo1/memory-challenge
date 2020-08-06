@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 const dataPopulators = require("./seed-data");
 
 // set this flag to recreate the models and reseed the DB
-const FORCE_RECREATE_MODELS = true;
+const FORCE_RECREATE_MODELS = false;
 
 const memory_challenge = new Sequelize("memory_challenge", "root", "adminadmin", {
   host: "localhost",
@@ -10,34 +10,35 @@ const memory_challenge = new Sequelize("memory_challenge", "root", "adminadmin",
   // dialect: "sqlite",
   // storage: "./server/database.sqlite",
   pool: { max: 5, min: 0, acquire: 30000, idle: 10000 },
-  operatorsAliases: false,
+  // operatorsAliases: false,
 });
 
 // Model definition
- const User = memory_challenge.define("User", {
-  id: { 
-    type: Sequelize.INTEGER, primaryKey: true },
+const User = memory_challenge.define("User", {
+  id: {
+    type: Sequelize.INTEGER, primaryKey: true
+  },
   username: Sequelize.STRING,
   firstname: Sequelize.STRING,
   lastname: Sequelize.STRING,
   email: Sequelize.STRING,
   password: Sequelize.STRING,
   totalwins: Sequelize.INTEGER,
-  banned: Sequelize.TINYINT, // 0 or 1
-});
+  banned: Sequelize.BOOLEAN, // 0 or 1, default 0
+  admin: Sequelize.BOOLEAN, // 0 or 1, default 0
+
+}, { underscored: true });
 
 const Game = memory_challenge.define("Game", {
-  id: { 
-    type: Sequelize.INTEGER, primaryKey: true },
-  //FK
-  gamename: Sequelize.STRING,
-  current_players: Sequelize.INTEGER, //current players
-  max_players: Sequelize.INTEGER,     //max players
-  state: Sequelize.TINYINT,
-  start_time: Sequelize.TIME,
-  winner: Sequelize.STRING, // data about who won the game, need to find a way to return this value to this table after a game ends
-
-}); 
+  id: {
+    type: Sequelize.INTEGER, primaryKey: true
+  },
+  title: Sequelize.STRING,
+  current_players: Sequelize.INTEGER,
+  max_players: Sequelize.INTEGER,
+  game_state: Sequelize.TINYINT, // 0 - in lobby, 1 - in progress, 2-  finish
+  winner: Sequelize.STRING, // who won
+}, { underscored: true });
 
 const Player = memory_challenge.define("Player", {
 
@@ -45,10 +46,8 @@ const Player = memory_challenge.define("Player", {
   clicks: Sequelize.INTEGER,     // number of times you clicked on a card to reveal it
   pairs: Sequelize.INTEGER,      // number of succesfully matched pairs
 
-}); 
+}, { underscored: true });
 
-
-// establish a link between the two entities
 //Hello.hasOne(Hello2);
 //Hello2.belongsTo(Hello);
 
@@ -61,7 +60,7 @@ Game.belongsToMany(User, { through: Player });
 (async function () {
   // Drop tables in order to avoid foreign key constraint issues
   if (FORCE_RECREATE_MODELS) {
-    User.drop(); // Hello has a foreign key referencing Hello
+    User.drop();
     Game.drop();
     Player.drop();
   }
@@ -71,13 +70,11 @@ Game.belongsToMany(User, { through: Player });
   await Player.sync({ force: FORCE_RECREATE_MODELS });
   // repopulate the db with predefined data
   if (FORCE_RECREATE_MODELS) {
-  //  dataPopulators.mockHelloData(Hello);
-  //  dataPopulators.mockHello2Data(Hello2);
+    //  dataPopulators.mockHelloData(Hello);
+    //  dataPopulators.mockHello2Data(Hello2);
   }
 })();
 
-//module.exports.Hello = Hello;
-//module.exports.Hello2 = Hello2;
 module.exports.User = User;
 module.exports.Game = Game;
 module.exports.Player = Player;

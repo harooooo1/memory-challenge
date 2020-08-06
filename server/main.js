@@ -23,9 +23,9 @@ const server = restify
 // .use(AuthHandlers.authFilter); // AUTH CHECK
 
 // LOGIN, LOGOUT AND REGISTER
-// server.post('/register', AuthHandlers.register);
-// server.post('/login', AuthHandlers.login);
-// server.post('/logout', AuthHandlers.logout);
+//server.post('/register', AuthHandlers.register);
+//server.post('/login', AuthHandlers.login);
+//server.post('/logout', AuthHandlers.logout);
 
 // HELLO
 server.head("/api/hello", HelloHandlers.list);

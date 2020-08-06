@@ -16,7 +16,7 @@ const memory_challenge = new Sequelize("memory_challenge", "root", "adminadmin",
 // Model definition
 const User = memory_challenge.define("User", {
   id: {
-    type: Sequelize.INTEGER, primaryKey: true
+    type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true
   },
   username: Sequelize.STRING,
   firstname: Sequelize.STRING,
@@ -31,7 +31,7 @@ const User = memory_challenge.define("User", {
 
 const Game = memory_challenge.define("Game", {
   id: {
-    type: Sequelize.INTEGER, primaryKey: true
+    type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true
   },
   title: Sequelize.STRING,
   current_players: Sequelize.INTEGER,

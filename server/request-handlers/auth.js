@@ -6,7 +6,10 @@ const jwt = require('jsonwebtoken');
 const apiSecret = 'VAC-SOME-TOKEN';
 
 // This will check if the request has valid auth token for all except login and register endpoints
+
 async function authFilter(req, res, next) {
+
+    console.log("test auth");
     // skip auth check for login
     if (req.url.match(/(login)|(register)/i)) {
         return next();
@@ -31,6 +34,7 @@ async function authFilter(req, res, next) {
 
 // This will create a new user with the given username and password and returna a valid authToken
 async function register(req, res, next) {
+    console.log("test register");
     const plainTextPassword = req.body.password;
     const passwordHash = await bcrypt.hash(plainTextPassword, 5);
     const newUser = {
@@ -56,6 +60,7 @@ async function register(req, res, next) {
 
 // This will return a new auth token provided correct username and password are provided
 async function login(req, res, next) {
+    console.log("test login");
     const credentials = { ...req.body };
     const user = await User.findOne({ where: { username: credentials.username } });
     const hashedPassword = (user && user.password) || '';

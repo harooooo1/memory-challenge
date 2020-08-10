@@ -1,0 +1,31 @@
+<p>login works!</p>
+<p>{{message}}</p>
+<a routerLink="/">Link to home page</a>
+
+<br>
+<br>
+
+<form [formGroup]="loginForm">
+  <label>
+    Username Name:
+    <input type="text"
+           formControlName="username">
+  </label>
+
+  <label>
+    Password:
+    <input type="text"
+           formControlName="password"
+           type="password">
+  </label>
+
+  <div *ngIf="loginForm.invalid"
+       style="color: red;">Form is not valid</div>
+
+
+</form>
+
+<br>
+<br>
+
+<button (click)="doLogin()">Login</button>

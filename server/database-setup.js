@@ -2,7 +2,6 @@ const Sequelize = require("sequelize");
 const dataPopulators = require("./seed-data");
 
 // set this flag to recreate the models and reseed the DB
-const FORCE_RECREATE_MODELS = false;
 
 const memory_challenge = new Sequelize("memory_challenge", "root", "adminadmin", {
   host: "localhost",
@@ -61,6 +60,10 @@ Game.belongsToMany(User, { through: Player });
 
 // INIT DB ENTITY MODELS
 (async function () {
+
+  const FORCE_RECREATE_MODELS = true;
+  const DO_SYNC = true;
+
   // Drop tables in order to avoid foreign key constraint issues
   if (FORCE_RECREATE_MODELS) {
     User.drop();
@@ -68,9 +71,12 @@ Game.belongsToMany(User, { through: Player });
     Player.drop();
   }
   // Sync models
-  await User.sync({ force: FORCE_RECREATE_MODELS });
-  await Game.sync({ force: FORCE_RECREATE_MODELS });
-  await Player.sync({ force: FORCE_RECREATE_MODELS });
+  if(DO_SYNC) {
+    await User.sync({ force: FORCE_RECREATE_MODELS });
+    await Game.sync({ force: FORCE_RECREATE_MODELS });
+    await Player.sync({ force: FORCE_RECREATE_MODELS });
+  }
+
   // repopulate the db with predefined data
   if (FORCE_RECREATE_MODELS) {
     //  dataPopulators.mockHelloData(Hello);

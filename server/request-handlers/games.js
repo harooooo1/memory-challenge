@@ -29,8 +29,6 @@ async function createGames(req, res, next) {
     return next();
 }
 
-
-
 async function makePlayer(game) {
 
     const newPlayer = {
@@ -44,7 +42,6 @@ async function makePlayer(game) {
     return player;
 }
 
-
 async function joinGames(req, res, next) {
 
     const gameId = req.params.id;
@@ -54,10 +51,12 @@ async function joinGames(req, res, next) {
             id: gameId
         }
     });
+    console.log(joinedGame);
+    
     console.log("3");
     const joinplayer = await makePlayer(joinedGame); ////
     console.log("4");
-    joinedGame.currentPlayers = joinplayer.playerNumber;
+    joinedGame.currentPlayers = JoinedGame.currentPlayers+1;
     console.log("5");
     await joinedGame.save();
     console.log("6");
@@ -73,7 +72,6 @@ async function joinGames(req, res, next) {
 async function StartGames() {
 
 }
-
 
 async function getGames(req, res, next) {
 
@@ -120,7 +118,6 @@ async function deleteGames(req, res, next) {
     return next();
 }
 
-
 async function revealCard() {
     // do stuff
 }
@@ -129,7 +126,11 @@ async function leaveGames() {
 
 }
 
-async function destroyPlayer(game) {
+async function kickPlayer() {
+
+}
+
+async function generateCards() {
 
 }
 

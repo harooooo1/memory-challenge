@@ -1,10 +1,13 @@
 const restify = require("restify");
 const corsMiddleware = require("restify-cors-middleware");
 
+console.log("HELLLO");
+
 // REQUEST HANDLERS IMPORT
 const AuthHandlers = require('./request-handlers/auth');
 const HelloHandlers = require("./request-handlers/hello");
-
+const GameHandlers = require("./request-handlers/games");
+const { ServiceUnavailableError } = require("restify-errors");
 // SERVER SETUP
 const cors = corsMiddleware({
   origins: ["*"],
@@ -28,6 +31,20 @@ const server = restify
 server.post('/register', AuthHandlers.register);
 server.post('/login', AuthHandlers.login);
 server.post('/logout', AuthHandlers.logout);
+
+// games
+
+server.head('/games', GameHandlers.getGames);
+server.get('/games/:id', GameHandlers.getGamesById);
+server.get('/games', GameHandlers.getGames);
+
+server.post('/games', GameHandlers.postGames);
+server.post('/player', GameHandlers.makePlayer);
+
+server.del('/games/:userid', GameHandlers.deleteGames);
+
+//server.post('asdfg', GameHandlers.joinGame);
+//server.post('asdfg', GameHandlers.playTurn);
 
 // HELLO
 server.head("/api/hello", HelloHandlers.list);

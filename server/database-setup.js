@@ -19,34 +19,37 @@ const User = memory_challenge.define("User", {
     type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true
   },
   username: Sequelize.STRING,
-  firstname: Sequelize.STRING,
-  lastname: Sequelize.STRING,
+  firstName: Sequelize.STRING,
+  lastName: Sequelize.STRING,
   email: Sequelize.STRING,
   password: Sequelize.STRING,
-  totalwins: Sequelize.INTEGER,
-  banned: Sequelize.BOOLEAN, // 0 or 1, default 0
-  admin: Sequelize.BOOLEAN, // 0 or 1, default 0
+  totalWins: Sequelize.INTEGER,
+  isBanned: Sequelize.BOOLEAN, // 0 or 1, default 0
+  isAdmin: Sequelize.BOOLEAN, // 0 or 1, default 0
+  authToken: Sequelize.STRING
 
-}, { underscored: true });
+});
 
 const Game = memory_challenge.define("Game", {
   id: {
     type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true
   },
   title: Sequelize.STRING,
-  current_players: Sequelize.INTEGER,
-  max_players: Sequelize.INTEGER,
-  game_state: Sequelize.TINYINT, // 0 - in lobby, 1 - in progress, 2-  finish
+  currentPlayers: Sequelize.INTEGER,
+  maxPlayers: Sequelize.INTEGER,
+  gameState: Sequelize.TINYINT, // 0 - in lobby, 1 - in progress, 2-  finish
   winner: Sequelize.STRING, // who won
-}, { underscored: true });
+});
 
 const Player = memory_challenge.define("Player", {
-
-  player_number: Sequelize.INTEGER, //players number inside the game (example: player1, player2 etc....)
+  id: {
+    type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true
+  },
+  playerNumber: Sequelize.INTEGER, //players number inside the game (example: player1, player2 etc....)
   clicks: Sequelize.INTEGER,     // number of times you clicked on a card to reveal it
   pairs: Sequelize.INTEGER,      // number of succesfully matched pairs
 
-}, { underscored: true });
+});
 
 //Hello.hasOne(Hello2);
 //Hello2.belongsTo(Hello);

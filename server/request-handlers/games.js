@@ -3,7 +3,6 @@ const User = require('../database-setup').User;
 const errs = require('./auth');
 const { Player } = require('../database-setup');
 
-
 async function postGames(req, res, next) {
 
     const userId = req.get('userId');
@@ -32,9 +31,9 @@ async function makePlayer(req, res, next) {
 
     const newPlayer = {
         playerNumber: req.body.playernum,
-        UserId: userId
+        UserId: userId,
+        GameId: null
         
-
     };
 
     const player = await Player.create(newPlayer);
@@ -91,7 +90,6 @@ async function deleteGames(req, res, next) {
 
     return next();
 }
-
 
 async function joinGame() {
 

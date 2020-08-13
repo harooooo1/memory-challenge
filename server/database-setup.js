@@ -62,7 +62,7 @@ Game.belongsToMany(User, { through: Player });
 // INIT DB ENTITY MODELS
 (async function () {
 
-  const FORCE_RECREATE_MODELS = true;
+  const FORCE_RECREATE_MODELS = false;
   const DO_SYNC = true;
 
   // Drop tables in order to avoid foreign key constraint issues
@@ -70,7 +70,7 @@ Game.belongsToMany(User, { through: Player });
     User.drop();
     Game.drop();
     Player.drop();
-  }
+  } 
   // Sync models
   if(DO_SYNC) {
     await User.sync({ force: FORCE_RECREATE_MODELS });

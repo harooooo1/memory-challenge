@@ -36,9 +36,9 @@ async function makePlayer(game) {
         GameId: game.id,
         UserId: game.UserId
     };
-
-    const player = await Player.create(newPlayer);
-
+    console.log("11");
+    const player = await Player.create(newPlayer); // problem for JoinGames, but not for CreateGames
+    console.log("12");
     return player;
 }
 
@@ -52,14 +52,13 @@ async function joinGames(req, res, next) {
         }
     });
     console.log(joinedGame);
-    
-    console.log("3");
+    console.log("1");
     const joinplayer = await makePlayer(joinedGame); ////
-    console.log("4");
+    console.log("2");
     joinedGame.currentPlayers = JoinedGame.currentPlayers+1;
-    console.log("5");
+    console.log("3");
     await joinedGame.save();
-    console.log("6");
+    console.log("4");
 
     res.send({
         code: 'Success',

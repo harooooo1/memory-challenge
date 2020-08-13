@@ -37,9 +37,8 @@ server.post('/logout', AuthHandlers.logout);
 server.head('/games', GameHandlers.getGames);
 server.get('/games/:id', GameHandlers.getGamesById);
 server.get('/games', GameHandlers.getGames);
-
-server.post('/games', GameHandlers.postGames);
-server.post('/player', GameHandlers.makePlayer);
+server.post('/games/:id/join', GameHandlers.joinGames);
+server.post('/games', GameHandlers.createGames);
 
 server.del('/games/:gameid', GameHandlers.deleteGames);
 

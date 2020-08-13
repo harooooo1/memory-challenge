@@ -1,9 +1,6 @@
 const Sequelize = require("sequelize");
 const dataPopulators = require("./seed-data");
 
-// set this flag to recreate the models and reseed the DB
-FORCE_RECREATE_MODELS = false;
-
 const memory_challenge = new Sequelize("memory_challenge", "root", "adminadmin", {
   host: "localhost",
   dialect: "mysql",
@@ -42,9 +39,7 @@ const Game = memory_challenge.define("Game", {
 });
 
 const Player = memory_challenge.define("Player", {
-  id: {
-    type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true
-  },
+
   playerNumber: Sequelize.INTEGER, //players number inside the game (example: player1, player2 etc....)
   clicks: Sequelize.INTEGER,     // number of times you clicked on a card to reveal it
   pairs: Sequelize.INTEGER,      // number of succesfully matched pairs

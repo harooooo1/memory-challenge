@@ -10,13 +10,13 @@ async function postGames(req, res, next) {
     const newGame = {
         title: req.body.title,
         UserId: userId,
-        currentPlayers: 0,
+        currentPlayers: 1,
         maxPlayers: 8,
         gameState: 0
     };
 
     const game = await Game.create(newGame);
-
+// await makePlayer();
     res.send({
         code: 'Success',
         data: game,
@@ -27,13 +27,10 @@ async function postGames(req, res, next) {
 
 async function makePlayer(req, res, next) {
 
-    const userId = req.get('userId');
+
 
     const newPlayer = {
-        playerNumber: req.body.playernum,
-        UserId: userId,
-        GameId: null
-        
+        playerNumber: null
     };
 
     const player = await Player.create(newPlayer);
@@ -43,7 +40,7 @@ async function makePlayer(req, res, next) {
         data: player,
     });
 
-    return next();
+    return next(); // return player
 }
 
 async function getGames(req, res, next) {

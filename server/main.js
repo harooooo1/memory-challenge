@@ -41,7 +41,7 @@ server.get('/games', GameHandlers.getGames);
 server.post('/games', GameHandlers.postGames);
 server.post('/player', GameHandlers.makePlayer);
 
-server.del('/games/:userid', GameHandlers.deleteGames);
+server.del('/games/:gameid', GameHandlers.deleteGames);
 
 //server.post('asdfg', GameHandlers.joinGame);
 //server.post('asdfg', GameHandlers.playTurn);

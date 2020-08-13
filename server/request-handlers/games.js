@@ -33,6 +33,7 @@ async function makePlayer(req, res, next) {
     const newPlayer = {
         playerNumber: req.body.playernum,
         UserId: userId
+        
 
     };
 
@@ -76,10 +77,10 @@ async function getGamesById(req, res, next) {
 
 async function deleteGames(req, res, next) {
 
-    const deleteId = req.params.userid;
+    const deleteId = req.params.gameid;
     const deleteGame = await Game.destroy({
         where: {
-            UserId: deleteId// ?
+            id: deleteId
         }
     });
 

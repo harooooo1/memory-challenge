@@ -2,6 +2,7 @@ const Sequelize = require("sequelize");
 const dataPopulators = require("./seed-data");
 
 // set this flag to recreate the models and reseed the DB
+FORCE_RECREATE_MODELS = false;
 
 const memory_challenge = new Sequelize("memory_challenge", "root", "adminadmin", {
   host: "localhost",
@@ -78,10 +79,10 @@ Game.belongsToMany(User, { through: Player });
   }
 
   // repopulate the db with predefined data
-  if (FORCE_RECREATE_MODELS) {
+  /*if (FORCE_RECREATE_MODELS) {
     //  dataPopulators.mockHelloData(Hello);
     //  dataPopulators.mockHello2Data(Hello2);
-  }
+  } */
 })();
 
 module.exports.User = User;

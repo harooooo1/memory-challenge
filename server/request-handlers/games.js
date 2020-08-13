@@ -10,61 +10,60 @@ async function createGames(req, res, next) {
     const newGame = {
         title: req.body.title,
         UserId: userId,
-        currentPlayers: 0,
+        currentPlayers: 1,
         maxPlayers: 8,
         gameState: 0
     };
 
     const game = await Game.create(newGame);
 
-    const hostplayer = await makePlayer(game);
-    game.currentPlayers = hostplayer.playerNumber;
-    await game.save();
-
     res.send({
         code: 'Success',
         data: game,
     });
 
+    await makePlayer(game, game.UserId);
+
     return next();
 }
 
-async function makePlayer(game) {
+async function makePlayer(game, userid) {
 
     const newPlayer = {
-        playerNumber: game.currentPlayers + 1,
+        playerNumber: game.currentPlayers,
         GameId: game.id,
-        UserId: game.UserId
+        UserId: userid
     };
-    console.log("11");
-    const player = await Player.create(newPlayer); // problem for JoinGames, but not for CreateGames
-    console.log("12");
+    console.log("zuz");
+    const player = await Player.create(newPlayer);
+    console.log("muz");
     return player;
 }
 
 async function joinGames(req, res, next) {
 
     const gameId = req.params.id;
+    const userId = req.get('userId');
 
     const joinedGame = await Game.findOne({
         where: {
             id: gameId
         }
     });
-    console.log(joinedGame);
-    console.log("1");
-    const joinplayer = await makePlayer(joinedGame); ////
-    console.log("2");
-    joinedGame.currentPlayers = JoinedGame.currentPlayers+1;
-    console.log("3");
+
+    const joinedPlayer = await makePlayer(joinedGame, userId);
+
+    console.log("1234");
+
+    joinedGame.currentPlayers++;
+
     await joinedGame.save();
-    console.log("4");
 
     res.send({
         code: 'Success',
-        data: joinplayer
+        data: joinedPlayer
     });
-    console.log("7");
+
     return next();
 }
 

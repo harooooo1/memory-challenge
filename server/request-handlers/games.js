@@ -85,7 +85,7 @@ async function getGames(req, res, next) {
 
 async function getGamesById(req, res, next) {
     const gameId = req.params.id;
-    const listGame = await Game.findAll({
+    const listGame = await Game.findOne({
         where: {
             id: gameId
         }
@@ -116,6 +116,7 @@ async function deleteGames(req, res, next) {
     return next();
 }
 
+/*
 async function revealCard() {
     // do stuff
 }
@@ -130,7 +131,7 @@ async function kickPlayer() {
 
 async function generateCards() {
 
-}
+} */
 
 module.exports.createGames = createGames;
 module.exports.getGames = getGames;

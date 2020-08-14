@@ -16,14 +16,15 @@ const User = memory_challenge.define("User", {
     type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true
   },
   username: Sequelize.STRING,
-  firstName: Sequelize.STRING,
-  lastName: Sequelize.STRING,
   email: Sequelize.STRING,
   password: Sequelize.STRING,
+  firstName: Sequelize.STRING,
+  lastName: Sequelize.STRING,
   totalWins: Sequelize.INTEGER,
+  authToken: Sequelize.STRING,
   isBanned: Sequelize.BOOLEAN, // 0 or 1, default 0
   isAdmin: Sequelize.BOOLEAN, // 0 or 1, default 0
-  authToken: Sequelize.STRING
+  
 
 });
 
@@ -32,17 +33,16 @@ const Game = memory_challenge.define("Game", {
     type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true
   },
   title: Sequelize.STRING,
-  currentPlayers: Sequelize.INTEGER,
+  currentPlayers: Sequelize.INTEGER, // number of players in the game room
   maxPlayers: Sequelize.INTEGER,
-  gameState: Sequelize.TINYINT, // 0 - in lobby, 1 - in progress, 2-  finish
+  gameState: Sequelize.TINYINT, // Do i need this field if that other one exists in game-model.js?
   winner: Sequelize.STRING, // who won
 });
 
 const Player = memory_challenge.define("Player", {
 
   playerNumber: Sequelize.INTEGER, //players number inside the game (example: player1, player2 etc....)
-  clicks: Sequelize.INTEGER,     // number of times you clicked on a card to reveal it
-  pairs: Sequelize.INTEGER,      // number of succesfully matched pairs
+  pairs: Sequelize.INTEGER,      // number of succesfully matched pairs a.k.a. score
 
 });
 

@@ -65,10 +65,6 @@ async function joinGames(req, res, next) {
     return next();
 }
 
-async function StartGames() {
-
-}
-
 async function getGames(req, res, next) {
 
     const listGames = await Game.findAll();
@@ -114,10 +110,12 @@ async function deleteGames(req, res, next) {
     return next();
 }
 
-/*
-async function revealCard() {
-    // do stuff
+async function startGames(req, res, next) {
+
+
+
 }
+/*
 
 async function leaveGames() {
 
@@ -127,12 +125,11 @@ async function kickPlayer() {
 
 }
 
-async function generateCards() {
-
-} */
+*/
 
 module.exports.createGames = createGames;
 module.exports.getGames = getGames;
 module.exports.getGamesById = getGamesById;
 module.exports.deleteGames = deleteGames;
 module.exports.joinGames = joinGames;
+module.exports.startGames = startGames;

@@ -34,7 +34,7 @@ async function makePlayer(game, userid) {
         GameId: game.id,
         UserId: userid
     };
-    console.log("zuz");
+    console.log("zuz", newPlayer);
     const player = await Player.create(newPlayer);
     console.log("muz");
     return player;

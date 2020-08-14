@@ -65,9 +65,9 @@ Game.belongsToMany(User, { through: Player });
     User.drop();
     Game.drop();
     Player.drop();
-  } 
+  }
   // Sync models
-  if(DO_SYNC) {
+  if (DO_SYNC) {
     await User.sync({ force: FORCE_RECREATE_MODELS });
     await Game.sync({ force: FORCE_RECREATE_MODELS });
     await Player.sync({ force: FORCE_RECREATE_MODELS });

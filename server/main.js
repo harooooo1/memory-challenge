@@ -1,6 +1,8 @@
 const restify = require("restify");
 const corsMiddleware = require("restify-cors-middleware");
 
+const { GameModel, CardState } = require("./game-model");
+
 console.log("HELLLO");
 
 // REQUEST HANDLERS IMPORT
@@ -53,3 +55,61 @@ server.get("/api/hello", HelloHandlers.list);
 server.listen(8080, () =>
   console.log("%s listening at %s", server.name, server.url)
 );
+
+
+
+(async function () {
+  const gameConfig = {
+    players: {
+      15: 0, // Harun
+      18: 1, // Vlado
+    },
+    cards: getCards(),
+  };
+
+  const gameModel = new GameModel(gameConfig);
+
+  gameModel.startGame();
+
+  await gameModel.revealCard(1, 15);
+  await gameModel.revealCard(2, 15);
+
+  await wait(3200);
+
+  await gameModel.revealCard(1, 18);
+  await gameModel.revealCard(0, 18);
+
+  await gameModel.revealCard(2, 18);
+  await gameModel.revealCard(3, 18);
+})();
+
+function getCards() {
+  const cards = [
+    {
+      identifier: "ace",
+      state: CardState.Hidden,
+    },
+    {
+      identifier: "ace",
+      state: CardState.Hidden,
+    },
+    {
+      identifier: "queen",
+      state: CardState.Hidden,
+    },
+    {
+      identifier: "queen",
+      state: CardState.Hidden,
+    },
+  ];
+  return cards;
+}
+
+async function wait(time) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log("done waiting");
+      resolve();
+    }, time);
+  });
+}

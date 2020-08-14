@@ -34,9 +34,9 @@ async function makePlayer(game, userid) {
         GameId: game.id,
         UserId: userid
     };
-    console.log("zuz", newPlayer);
+
     const player = await Player.create(newPlayer);
-    console.log("muz");
+
     return player;
 }
 
@@ -52,8 +52,6 @@ async function joinGames(req, res, next) {
     });
 
     const joinedPlayer = await makePlayer(joinedGame, userId);
-
-    console.log("1234");
 
     joinedGame.currentPlayers++;
 

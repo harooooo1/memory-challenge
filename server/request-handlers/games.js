@@ -90,44 +90,40 @@ async function getGamesById(req, res, next) {
 async function startGames(req, res, next) {
 
     const gameId = req.params.id;
+    const hostId = req.get('userId');
 
-    //fetch all players that share the specific game id
-    const players = await Player.findAll(
-        {
-            where: { GameId: gameId }
-        });
+    const checkGame = await Game.findOne({
+        where: {
+            id: gameId
+        }
+    });
 
-    const playersMap = players.reduce((acc, player) => {
-        acc[player.UserId] = player.playerNumber;
-        return acc;
-    }, {})
+    if (hostId == checkGame.UserId) {
 
-    const gameConfig = {
-        players: playersMap,
-        cards: getCards(),
-    };
+        //fetch all players that share the specific game id
+        const players = await Player.findAll(
+            {
+                where: { GameId: gameId }
+            });
 
-    GAMESMAP[gameId] = await new GameModel(gameConfig);
-    //GAMESMAP[gameId] = gameModel;
-    console.log("gamesmap je", GAMESMAP[gameId]);
-    await GAMESMAP[gameId].startGame();
+        const playersMap = players.reduce((acc, player) => {
+            acc[player.UserId] = player.playerNumber;
+            return acc;
+        }, {})
 
-    /*    await GAMESMAP[gameId].revealCard(0, 6);
-        await GAMESMAP[gameId].revealCard(1, 6);
-    
-        await wait(3200);
-    
-        await GAMESMAP[gameId].revealCard(2, 6);
-        await GAMESMAP[gameId].revealCard(3, 6); */
-    /*
-    await GAMESMAP[gameId].revealCard(1, 18);
-    await GAMESMAP[gameId].revealCard(0, 18);
-    
-    await GAMESMAP[gameId].revealCard(2, 18);
-    await GAMESMAP[gameId].revealCard(3, 18);
-    */
-    //    res.send({});
-    res.send({});
+        const gameConfig = {
+            players: playersMap,
+            cards: getCards(),
+        };
+
+        GAMESMAP[gameId] = await new GameModel(gameConfig);
+        console.log("gamesmap is ", GAMESMAP[gameId]);
+        await GAMESMAP[gameId].startGame();
+
+        res.send({});
+    } else {
+        res.send({ status: "only the Host can start the game" });
+    }
 }
 
 async function revealCards(req, res, next) {
@@ -138,8 +134,9 @@ async function revealCards(req, res, next) {
     const cardIndex = req.body.card;
     console.log("cardindex is", cardIndex);
 
+    // play turn
     await GAMESMAP[gameId].revealCard(cardIndex, userId);
-    
+
     res.send({});
 }
 
@@ -188,8 +185,47 @@ async function leaveGames(req, res, next) {  //this is only for leaving lobby
 
 }
 
-async function kickPlayer() {
+async function kickPlayer(req, res, next) {
 
+    const hostId = req.get('userId');
+
+
+
+    const gameId = req.params.id;
+    const playerId = req.body.player;
+
+    const leavingGame = await Game.findOne({
+        where: {
+            id: gameId
+        }
+    });
+    if (hostId == playerId) {
+        res.send({ status: "Can't kick yourself" });
+    }
+
+    else if (hostId == leavingGame.UserId) {
+
+        leavingGame.currentPlayers--;
+        await leavingGame.save();
+
+        const kickedPlayer = await Player.destroy({
+            where: {
+                UserId: playerId,
+                GameId: gameId
+            }
+        });
+
+        res.send({
+            code: 'Success',
+            kickedplayer: kickedPlayer
+        });
+
+        return next();
+    } 
+    
+    else {
+        res.send({ status: "Only the Host can kick players" });
+    }
 }
 
 // helper functions 
@@ -242,8 +278,13 @@ async function wait(time) {
 
 module.exports.getGames = getGames;
 module.exports.getGamesById = getGamesById;
+
 module.exports.createGames = createGames;
 module.exports.joinGames = joinGames;
-module.exports.leaveGames = leaveGames;
+
 module.exports.startGames = startGames;
+module.exports.leaveGames = leaveGames;
+
 module.exports.revealCards = revealCards;
+
+module.exports.kickPlayer = kickPlayer;

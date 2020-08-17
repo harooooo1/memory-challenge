@@ -47,8 +47,6 @@ async function joinGames(req, res, next) {
 
     const joinedPlayer = await makePlayer(joinedGame, userId);
 
-
-
     await joinedGame.save();
 
     res.send({
@@ -98,6 +96,9 @@ async function startGames(req, res, next) {
         }
     });
 
+    checkGame.GameState = 1; //state changed from Lobby to Started, also need to change it to 2 when its finished
+    await checkGame.save();
+
     if (hostId == checkGame.UserId) {
 
         //fetch all players that share the specific game id
@@ -140,8 +141,10 @@ async function revealCards(req, res, next) {
     res.send({});
 }
 
-async function leaveGames(req, res, next) {  //this is only for leaving lobby
+async function leaveGames(req, res, next) {
+    //this is only for leaving lobby
     //deletes the game if you are the host, leaves the game if you are not host
+    //need to also make a different endpoint for leaving the game
     const gameId = req.params.id;
     const deleteId = req.get('userId');
 
@@ -221,8 +224,8 @@ async function kickPlayer(req, res, next) {
         });
 
         return next();
-    } 
-    
+    }
+
     else {
         res.send({ status: "Only the Host can kick players" });
     }

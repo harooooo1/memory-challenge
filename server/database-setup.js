@@ -35,7 +35,7 @@ const Game = memory_challenge.define("Game", {
   title: Sequelize.STRING,
   currentPlayers: Sequelize.INTEGER, // number of players in the game room
   maxPlayers: Sequelize.INTEGER,
-  gameState: Sequelize.TINYINT, // Do i need this field if that other one exists in game-model.js?
+  gameState: Sequelize.TINYINT, // 0 - in lobby, 1 - started, 2 - finished
   winner: Sequelize.STRING, // who won
 });
 

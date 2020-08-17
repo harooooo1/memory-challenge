@@ -1,8 +1,6 @@
 const restify = require("restify");
 const corsMiddleware = require("restify-cors-middleware");
 
-const { GameModel, CardState } = require("./game-model");
-
 console.log("HELLLO");
 
 // REQUEST HANDLERS IMPORT
@@ -37,12 +35,16 @@ server.post('/logout', AuthHandlers.logout);
 // games
 
 server.head('/games', GameHandlers.getGames);
-server.get('/games/:id', GameHandlers.getGamesById);
 server.get('/games', GameHandlers.getGames);
-server.post('/games/:id/join', GameHandlers.joinGames);
-server.post('/games', GameHandlers.createGames);
+server.get('/games/:id', GameHandlers.getGamesById);
 
-server.del('/games/:gameid', GameHandlers.deleteGames);
+server.post('/games', GameHandlers.createGames);
+server.post('/games/:id/join', GameHandlers.joinGames);
+server.post('/games/:id/leave', GameHandlers.leaveGames);
+server.post('/games/:id/start', GameHandlers.startGames);
+
+server.post('/games/:id/reveal-card', GameHandlers.revealCards);
+
 
 //server.post('asdfg', GameHandlers.joinGame);
 //server.post('asdfg', GameHandlers.playTurn);
@@ -56,8 +58,7 @@ server.listen(8080, () =>
   console.log("%s listening at %s", server.name, server.url)
 );
 
-
-
+/*
 (async function () {
   const gameConfig = {
     players: {
@@ -82,34 +83,4 @@ server.listen(8080, () =>
   await gameModel.revealCard(2, 18);
   await gameModel.revealCard(3, 18);
 })();
-
-function getCards() {
-  const cards = [
-    {
-      identifier: "ace",
-      state: CardState.Hidden,
-    },
-    {
-      identifier: "ace",
-      state: CardState.Hidden,
-    },
-    {
-      identifier: "queen",
-      state: CardState.Hidden,
-    },
-    {
-      identifier: "queen",
-      state: CardState.Hidden,
-    },
-  ];
-  return cards;
-}
-
-async function wait(time) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      console.log("done waiting");
-      resolve();
-    }, time);
-  });
-}
+*/

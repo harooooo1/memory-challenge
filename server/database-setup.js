@@ -58,7 +58,7 @@ Game.belongsToMany(User, { through: Player });
 (async function () {
 
   const FORCE_RECREATE_MODELS = false;
-  const DO_SYNC = true;
+  const DO_SYNC = false;
 
   // Drop tables in order to avoid foreign key constraint issues
   if (FORCE_RECREATE_MODELS) {

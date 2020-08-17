@@ -126,7 +126,7 @@ class GameModel {
 
   nextPlayer() {
     const nextPlayerIndex = (this.currentPlayer + 1) % this.numberOfPlayers;
-    console.log("next payer", { nextPlayerIndex });
+    console.log("next player", { nextPlayerIndex });
     this.currentPlayer = nextPlayerIndex;
   }
 

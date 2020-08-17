@@ -62,7 +62,7 @@ class GameModel {
 
     if (!this.firstRevealedCard) {
       this.firstRevealedCard = card;
-      return;
+      return card;
     }
 
     const matchingCards = this.firstRevealedCard.identifier === card.identifier;
@@ -82,7 +82,7 @@ class GameModel {
         this.printCards();
       }, 3000);
 
-      return;
+      return card;
     }
 
     // match found

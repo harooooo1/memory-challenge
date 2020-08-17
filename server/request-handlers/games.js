@@ -71,7 +71,7 @@ async function getGames(req, res, next) {
 
 async function getGamesById(req, res, next) {
     const gameId = req.params.id;
-    const listGame = await Game.findOne({
+    const listedGame = await Game.findOne({
         where: {
             id: gameId
         }
@@ -79,7 +79,8 @@ async function getGamesById(req, res, next) {
 
     res.send({
         code: 'Success',
-        data: listGame
+        data: listedGame,
+        cards: GAMESMAP[gameId] && GAMESMAP[gameId].cards
     });
 
     return next();
@@ -135,10 +136,16 @@ async function revealCards(req, res, next) {
     const cardIndex = req.body.card;
     console.log("cardindex is", cardIndex);
 
-    // play turn
-    await GAMESMAP[gameId].revealCard(cardIndex, userId);
+    let card;
 
-    res.send({});
+    try {
+        card = await GAMESMAP[gameId].revealCard(cardIndex, userId);
+    } catch (error) {
+        res.send({ error: error.toString() })
+    }
+
+console.log("card", card);
+    res.send({ card: card.identifier });
 }
 
 async function leaveGames(req, res, next) {

@@ -109,6 +109,7 @@ async function startGames(req, res, next) {
 
     GAMESMAP[gameId] = await new GameModel(gameConfig);
     //GAMESMAP[gameId] = gameModel;
+    console.log("gamesmap je", GAMESMAP[gameId]);
     await GAMESMAP[gameId].startGame();
 
     /*    await GAMESMAP[gameId].revealCard(0, 6);
@@ -126,20 +127,20 @@ async function startGames(req, res, next) {
     await GAMESMAP[gameId].revealCard(3, 18);
     */
     //    res.send({});
-
+    res.send({});
 }
 
 async function revealCards(req, res, next) {
     const gameId = req.params.id;
-    console.log("gameid je", gameId);
+    console.log("gameid is", gameId);
     const userId = req.get('userId');
-    console.log("userid je", userId);
+    console.log("userid is", userId);
     const cardIndex = req.body.card;
-    console.log("cardindex je", cardIndex);
+    console.log("cardindex is", cardIndex);
 
     await GAMESMAP[gameId].revealCard(cardIndex, userId);
-    console.log("odradio sam potez");
-    return next;
+    
+    res.send({});
 }
 
 async function leaveGames(req, res, next) {  //this is only for leaving lobby

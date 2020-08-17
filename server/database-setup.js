@@ -56,7 +56,7 @@ Game.belongsToMany(User, { through: Player });
 
 // INIT DB ENTITY MODELS
 (async function () {
-
+ 
   const FORCE_RECREATE_MODELS = false;
   const DO_SYNC = false;
 

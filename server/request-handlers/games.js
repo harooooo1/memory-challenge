@@ -80,7 +80,7 @@ async function getGamesById(req, res, next) {
     res.send({
         code: 'Success',
         data: listedGame,
-        cards: GAMESMAP[gameId] && GAMESMAP[gameId].cards
+        cards: GAMESMAP[gameId] && GAMESMAP[gameId].readCards()
     });
 
     return next();
@@ -111,7 +111,7 @@ async function startGames(req, res, next) {
         const playersMap = players.reduce((acc, player) => {
             acc[player.UserId] = player.playerNumber;
             return acc;
-        }, {})
+        }, {});
 
         const gameConfig = {
             players: playersMap,
@@ -124,7 +124,7 @@ async function startGames(req, res, next) {
 
         res.send({});
     } else {
-        res.send({ status: "only the Host can start the game" });
+        res.send({ status: "only Host can start the game" });
     }
 }
 
@@ -144,7 +144,7 @@ async function revealCards(req, res, next) {
         res.send({ error: error.toString() })
     }
 
-console.log("card", card);
+    console.log("card", card);
     res.send({ card: card.identifier });
 }
 
@@ -254,25 +254,18 @@ async function makePlayer(game, userid) {
 }
 
 function getCards() {
-    const cards = [
-        {
-            identifier: "ace",
-            state: CardState.Hidden,
-        },
-        {
-            identifier: "ace",
-            state: CardState.Hidden,
-        },
-        {
-            identifier: "queen",
-            state: CardState.Hidden,
-        },
-        {
-            identifier: "queen",
-            state: CardState.Hidden,
-        },
-    ];
-    return cards;
+    const CardSetCopy = [...CardSet];
+    CardSetCopy.sort((a, b) => (Math.random() - 0.5));
+    const Cardzzz2 = CardSet.slice(0, 8);
+    const Cardzzz3 = Cardzzz2.concat(Cardzzz2)
+    Cardzzz3.sort((a, b) => (Math.random() - 0.5));
+
+    const playCards = Cardzzz3.map((card) => {
+        return { identifier: card, state: CardState.Hidden };
+    });
+
+    return playCards;
+
 }
 
 async function wait(time) {
@@ -283,6 +276,82 @@ async function wait(time) {
         }, time);
     });
 }
+
+
+const CardSet = ["10_of_clubs",
+    "10_of_diamonds",
+    "10_of_hearts",
+    "10_of_spades",
+    "2_of_clubs",
+    "2_of_diamonds",
+    "2_of_hearts",
+    "2_of_spades",
+    "3_of_clubs",
+    "3_of_diamonds",
+    "3_of_hearts",
+    "3_of_spades",
+    "4_of_clubs",
+    "4_of_diamonds",
+    "4_of_hearts",
+    "4_of_spades",
+    "5_of_clubs",
+    "5_of_diamonds",
+    "5_of_hearts",
+    "5_of_spades",
+    "6_of_clubs",
+    "6_of_diamonds",
+    "6_of_hearts",
+    "6_of_spades",
+    "7_of_clubs",
+    "7_of_diamonds",
+    "7_of_hearts",
+    "7_of_spades",
+    "8_of_clubs",
+    "8_of_diamonds",
+    "8_of_hearts",
+    "8_of_spades",
+    "9_of_clubs",
+    "9_of_diamonds",
+    "9_of_hearts",
+    "9_of_spades",
+    "ace_of_clubs",
+    "ace_of_diamonds",
+    "ace_of_hearts",
+    "ace_of_spades",
+    "black_joker",
+    "jack_of_clubs",
+    "jack_of_diamonds",
+    "jack_of_hearts",
+    "jack_of_spades",
+    "king_of_clubs",
+    "king_of_diamonds",
+    "king_of_hearts",
+    "king_of_spades",
+    "queen_of_clubs",
+    "queen_of_diamonds",
+    "queen_of_hearts",
+    "queen_of_spades",
+    "red_joker"];
+
+
+const cards = [
+    {
+        identifier: "ace",
+        state: CardState.Hidden,
+    },
+    {
+        identifier: "ace",
+        state: CardState.Hidden,
+    },
+    {
+        identifier: "queen",
+        state: CardState.Hidden,
+    },
+    {
+        identifier: "queen",
+        state: CardState.Hidden,
+    },
+];
 
 //exporting endpoints
 
@@ -298,3 +367,5 @@ module.exports.leaveGames = leaveGames;
 module.exports.revealCards = revealCards;
 
 module.exports.kickPlayer = kickPlayer;
+
+module.exports.getCards = getCards;

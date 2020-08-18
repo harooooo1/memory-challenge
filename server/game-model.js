@@ -24,6 +24,16 @@ class GameModel {
     this.firstRevealedCard = null;
   }
 
+  readCards() {
+    return this.cards.map(card => {
+      if (card.state == CardState.Hidden) {
+        return { state: CardState.Hidden }
+      }
+      return card;
+    });
+  }
+
+
   startGame() {
     console.log("starting a game");
     this.printCards();

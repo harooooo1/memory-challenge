@@ -24,7 +24,7 @@ const User = memory_challenge.define("User", {
   authToken: Sequelize.STRING,
   isBanned: Sequelize.BOOLEAN, // 0 or 1, default 0
   isAdmin: Sequelize.BOOLEAN, // 0 or 1, default 0
-  
+
 
 });
 
@@ -56,7 +56,7 @@ Game.belongsToMany(User, { through: Player });
 
 // INIT DB ENTITY MODELS
 (async function () {
- 
+
   const FORCE_RECREATE_MODELS = false;
   const DO_SYNC = false;
 

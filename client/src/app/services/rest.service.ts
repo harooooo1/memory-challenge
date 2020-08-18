@@ -35,6 +35,12 @@ export class RestService {
     });
   }
 
+  leaveGameWithId(id) {
+    return this.http.post(this.apiEndpoint + "games/" + id + "/leave", null, {
+      headers: { "x-auth-token": this.authService.getToken() },
+    });
+  }
+
   revealCard(gameId, cardIndex) {
     return this.http.post(
       this.apiEndpoint + "games/" + gameId + "/reveal-card",

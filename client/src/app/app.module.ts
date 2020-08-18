@@ -9,12 +9,13 @@ import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { GamesListComponent } from './components/games-list/games-list.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     HomeComponent,
-    GamesListComponent
+    GamesListComponent,
   ],
   imports: [
     BrowserModule,

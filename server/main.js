@@ -41,7 +41,7 @@ server.get('/games', GameHandlers.getGames);
 server.get('/games/:id', GameHandlers.getGamesById);
 
 server.post('/games', GameHandlers.createGames);
-server.post('/games/:id', GameHandlers.joinGames);
+server.post('/games/:id/join', GameHandlers.joinGames);
 
 server.post('/games/:id/start', GameHandlers.startGames);
 server.post('/games/:id/leave', GameHandlers.leaveGames);

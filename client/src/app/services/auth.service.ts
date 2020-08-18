@@ -52,4 +52,9 @@ export class AuthService {
   isUserAuthenticated() {
     return this.isLoggedIn;
   }
+
+  getToken() {
+    return this.token;
+  }
+
 }

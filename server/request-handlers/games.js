@@ -93,39 +93,43 @@ async function startGames(req, res, next) {
 
     const checkGame = await Game.findOne({
         where: {
-            id: gameId
+            id: gameId,
+            gameState: 0
         }
     });
 
-    checkGame.GameState = 1; //state changed from Lobby to Started, also need to change it to 2 when its finished
-    await checkGame.save();
+    if (checkGame.gameState != 1) {
+        checkGame.gameState = 1; //state changed from Lobby to Started, also need to change it to 2 when its finished
+        await checkGame.save();
 
-    if (hostId == checkGame.UserId) {
+        if (hostId == checkGame.UserId) {
 
-        //fetch all players that share the specific game id
-        const players = await Player.findAll(
-            {
-                where: { GameId: gameId }
-            });
+            //fetch all players that share the specific game id
+            const players = await Player.findAll(
+                {
+                    where: { GameId: gameId }
+                });
 
-        const playersMap = players.reduce((acc, player) => {
-            acc[player.UserId] = player.playerNumber;
-            return acc;
-        }, {});
+            const playersMap = players.reduce((acc, player) => {
+                acc[player.UserId] = player.playerNumber;
+                return acc;
+            }, {});
 
-        const gameConfig = {
-            players: playersMap,
-            cards: getCards(),
-        };
+            const gameConfig = {
+                players: playersMap,
+                cards: getCards(),
+            };
 
-        GAMESMAP[gameId] = await new GameModel(gameConfig);
-        console.log("gamesmap is ", GAMESMAP[gameId]);
-        await GAMESMAP[gameId].startGame();
+            GAMESMAP[gameId] = await new GameModel(gameConfig);
+            console.log("gamesmap is ", GAMESMAP[gameId]);
+            await GAMESMAP[gameId].startGame();
 
-        res.send({});
-    } else {
-        res.send({ status: "only Host can start the game" });
-    }
+            res.send({ code: "success", data: GAMESMAP[gameId].readCards() });
+        } else {
+            res.send({ status: "only Host can start the game" });
+        }
+
+    } else { res.send({ status: "game is already started" }); }
 }
 
 async function revealCards(req, res, next) {

@@ -131,9 +131,8 @@ async function startGames(req, res) {
             GAMESMAP[gameId] = await new GameModel(gameConfig);
             await GAMESMAP[gameId].startGame();
 
-            res.send({ code: "success", data: GAMESMAP[gameId].readCards() });
+            res.send({ code: "success", data: GAMESMAP[gameId].cards });
         }
-
 
     }
 }
@@ -141,9 +140,6 @@ async function startGames(req, res) {
 async function revealCards(req, res) {
 
     const gameId = req.params.id;
-
-
-
     const userId = req.get('userId');
     const cardIndex = req.body.card;
 
@@ -154,6 +150,8 @@ async function revealCards(req, res) {
     } catch (error) {
         res.send({ error: error.toString() })
     }
+
+    res.send({ card: revealedcard.identifier, cardIndex: cardIndex });
 
     if (GAMESMAP[gameId].checkIfGameIsDone()) {
 
@@ -166,9 +164,6 @@ async function revealCards(req, res) {
         check.gameState = 2;
         await check.save();
     }
-
-    res.send({ card: revealedcard.identifier });
-
 }
 
 async function leaveGames(req, res, next) {
@@ -276,17 +271,17 @@ async function makePlayer(game, userid) {
 }
 
 function getCards() {
-    const CardSetCopy = [...CardSet];
+    var CardSetCopy = [...CardSet];
     CardSetCopy.sort((a, b) => (Math.random() - 0.5));
-    const Cardzzz2 = CardSet.slice(0, 2);
-    const Cardzzz3 = Cardzzz2.concat(Cardzzz2)
-    Cardzzz3.sort((a, b) => (Math.random() - 0.5));
+    CardSetCopy = CardSetCopy.slice(0, 4);
+    CardSetCopy = CardSetCopy.concat(CardSetCopy)
+    CardSetCopy.sort((a, b) => (Math.random() - 0.5));
 
-    const playCards = Cardzzz3.map((card) => {
+    CardSetCopy = CardSetCopy.map((card) => {
         return { identifier: card, state: CardState.Hidden };
     });
 
-    return playCards;
+    return CardSetCopy;
 
 }
 
@@ -364,10 +359,7 @@ module.exports.createGames = createGames;
 module.exports.joinGames = joinGames;
 
 module.exports.startGames = startGames;
-module.exports.leaveGames = leaveGames;
-
 module.exports.revealCards = revealCards;
 
+module.exports.leaveGames = leaveGames;
 module.exports.kickPlayer = kickPlayer;
-
-module.exports.getCards = getCards;

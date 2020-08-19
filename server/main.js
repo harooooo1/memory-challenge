@@ -1,8 +1,7 @@
 const restify = require("restify");
 const corsMiddleware = require("restify-cors-middleware");
-console.log("HELLLO");
 
-const { Cardzzz } = require("./request-handlers/games")
+console.log("HELLLO");
 
 // REQUEST HANDLERS IMPORT
 const AuthHandlers = require('./request-handlers/auth');
@@ -58,5 +57,3 @@ server.get("/api/hello", HelloHandlers.list);
 server.listen(8080, () =>
   console.log("%s listening at %s", server.name, server.url)
 );
-
-GameHandlers.getCards();

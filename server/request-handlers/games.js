@@ -94,7 +94,6 @@ async function startGames(req, res, next) {
     const checkGame = await Game.findOne({
         where: {
             id: gameId,
-            gameState: 0
         }
     });
 
@@ -121,7 +120,6 @@ async function startGames(req, res, next) {
             };
 
             GAMESMAP[gameId] = await new GameModel(gameConfig);
-            console.log("gamesmap is ", GAMESMAP[gameId]);
             await GAMESMAP[gameId].startGame();
 
             res.send({ code: "success", data: GAMESMAP[gameId].readCards() });
@@ -133,23 +131,24 @@ async function startGames(req, res, next) {
 }
 
 async function revealCards(req, res, next) {
-    const gameId = req.params.id;
-    console.log("gameid is", gameId);
-    const userId = req.get('userId');
-    console.log("userid is", userId);
-    const cardIndex = req.body.card;
-    console.log("cardindex is", cardIndex);
 
-    let card;
+    const gameId = req.params.id;
+
+    // if (GAMESMAP[gameId].checkIfGameIsDone()) {  }
+
+    const userId = req.get('userId');
+    const cardIndex = req.body.card;
+
+    let revealedcard;
 
     try {
-        card = await GAMESMAP[gameId].revealCard(cardIndex, userId);
+        revealedcard = await GAMESMAP[gameId].revealCard(cardIndex, userId);
     } catch (error) {
         res.send({ error: error.toString() })
     }
+    console.log(revealedcard);
+    res.send({ card: revealedcard.identifier });
 
-    console.log("card", card);
-    res.send({ card: card.identifier });
 }
 
 async function leaveGames(req, res, next) {
@@ -260,7 +259,7 @@ async function makePlayer(game, userid) {
 function getCards() {
     const CardSetCopy = [...CardSet];
     CardSetCopy.sort((a, b) => (Math.random() - 0.5));
-    const Cardzzz2 = CardSet.slice(0, 8);
+    const Cardzzz2 = CardSet.slice(0, 2);
     const Cardzzz3 = Cardzzz2.concat(Cardzzz2)
     Cardzzz3.sort((a, b) => (Math.random() - 0.5));
 

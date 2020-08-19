@@ -106,6 +106,7 @@ class GameModel {
     if (this.checkIfGameIsDone()) {
       this.printScore();
     }
+    return card;
   }
 
   getGameState() {

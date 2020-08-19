@@ -32,7 +32,7 @@ async function createGames(req, res, next) {
     return next();
 }
 
-async function joinGames(req, res, next) {
+async function joinGames(req, res) {
 
     const gameId = req.params.id;
     const userId = req.get('userId');
@@ -43,21 +43,24 @@ async function joinGames(req, res, next) {
         }
     });
 
-    joinedGame.currentPlayers++;
+    if (joinedGame.gameState != 0) { res.send({ status: "game is already started" }) }
 
-    const joinedPlayer = await makePlayer(joinedGame, userId);
+    else {
+        joinedGame.currentPlayers++;
 
-    await joinedGame.save();
+        const joinedPlayer = await makePlayer(joinedGame, userId);
 
-    res.send({
-        code: 'Success',
-        data: joinedPlayer
-    });
+        await joinedGame.save();
 
-    return next();
+        res.send({
+            code: 'Success',
+            data: joinedPlayer
+        });
+    }
+
 }
 
-async function getGames(req, res, next) {
+async function getGames(res, next) {
 
     const listGames = await Game.findAll();
 
@@ -86,7 +89,7 @@ async function getGamesById(req, res, next) {
     return next();
 }
 
-async function startGames(req, res, next) {
+async function startGames(req, res) {
 
     const gameId = req.params.id;
     const hostId = req.get('userId');
@@ -97,11 +100,17 @@ async function startGames(req, res, next) {
         }
     });
 
-    if (checkGame.gameState != 1) {
+    if (checkGame.gameState != 0) {
+        res.send({ status: "game is already started" });
+    }
+    else if (checkGame.gameState == 0) {
         checkGame.gameState = 1; //state changed from Lobby to Started, also need to change it to 2 when its finished
         await checkGame.save();
 
-        if (hostId == checkGame.UserId) {
+        if (hostId != checkGame.UserId) {
+            res.send({ status: "only Host can start the game" });
+        }
+        else {
 
             //fetch all players that share the specific game id
             const players = await Player.findAll(
@@ -123,18 +132,17 @@ async function startGames(req, res, next) {
             await GAMESMAP[gameId].startGame();
 
             res.send({ code: "success", data: GAMESMAP[gameId].readCards() });
-        } else {
-            res.send({ status: "only Host can start the game" });
         }
 
-    } else { res.send({ status: "game is already started" }); }
+
+    }
 }
 
-async function revealCards(req, res, next) {
+async function revealCards(req, res) {
 
     const gameId = req.params.id;
 
-    // if (GAMESMAP[gameId].checkIfGameIsDone()) {  }
+
 
     const userId = req.get('userId');
     const cardIndex = req.body.card;
@@ -146,7 +154,19 @@ async function revealCards(req, res, next) {
     } catch (error) {
         res.send({ error: error.toString() })
     }
-    console.log(revealedcard);
+
+    if (GAMESMAP[gameId].checkIfGameIsDone()) {
+
+        const check = await Game.findOne({
+            where: {
+                id: gameId
+            }
+        });
+
+        check.gameState = 2;
+        await check.save();
+    }
+
     res.send({ card: revealedcard.identifier });
 
 }
@@ -171,9 +191,11 @@ async function leaveGames(req, res, next) {
         res.send({ code: 'Success', gamedeleted: "game deleted" });
 
         return next();
-    } else {
+    }
+    else {
 
         leavingGame.currentPlayers--;
+
         await leavingGame.save();
 
         const deletePlayer = await Player.destroy({
@@ -191,34 +213,33 @@ async function leaveGames(req, res, next) {
         return next();
     }
 
-
-
-    return next();
-
-
 }
 
 async function kickPlayer(req, res, next) {
-
+    //kick a player from a game lobby by his user id
     const hostId = req.get('userId');
-
-
-
     const gameId = req.params.id;
     const playerId = req.body.player;
 
     const leavingGame = await Game.findOne({
         where: {
-            id: gameId
+            id: gameId,
         }
     });
-    if (hostId == playerId) {
+
+    if (leavingGame.gameState != 0) {
+        res.send({ status: "can't kick players if a game is started" })
+    }
+    else if (leavingGame.currentPlayers <= 1) {
+        res.send({ status: "No one to kick" });
+    }
+    else if (hostId == playerId) {
         res.send({ status: "Can't kick yourself" });
     }
-
     else if (hostId == leavingGame.UserId) {
 
         leavingGame.currentPlayers--;
+
         await leavingGame.save();
 
         const kickedPlayer = await Player.destroy({
@@ -227,15 +248,13 @@ async function kickPlayer(req, res, next) {
                 GameId: gameId
             }
         });
-
+        console.log("we kicked", kickedPlayer);
         res.send({
             code: 'Success',
-            kickedplayer: kickedPlayer
+            KickedUserId: playerId
         });
 
-        return next();
     }
-
     else {
         res.send({ status: "Only the Host can kick players" });
     }
@@ -335,26 +354,6 @@ const CardSet = ["10_of_clubs",
     "queen_of_hearts",
     "queen_of_spades",
     "red_joker"];
-
-
-const cards = [
-    {
-        identifier: "ace",
-        state: CardState.Hidden,
-    },
-    {
-        identifier: "ace",
-        state: CardState.Hidden,
-    },
-    {
-        identifier: "queen",
-        state: CardState.Hidden,
-    },
-    {
-        identifier: "queen",
-        state: CardState.Hidden,
-    },
-];
 
 //exporting endpoints
 

@@ -10,6 +10,8 @@ const GAMESMAP = {}
 
 //note to self: need to see in which functions do I need return next(); and in which ones I dont
 
+//add endpoint for quitting Game, endpoint for resign, function for score updating in tables
+
 async function createGames(req, res, next) {
 
     const userId = req.get('userId');

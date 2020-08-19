@@ -34,8 +34,10 @@ async function createGames(req, res, next) {
     return next();
 }
 
-async function joinGames(req, res) {
+async function joinGames(req, res, next) {
 
+
+    //add functionality to not allow users to join more than 1 game
     const gameId = req.params.id;
     const userId = req.get('userId');
 
@@ -45,8 +47,19 @@ async function joinGames(req, res) {
         }
     });
 
+    const joiningPlayer = await Player.findOne({
+        where: {
+            UserId: userId,
+            GameId: joinedGame.id
+        }
+    });
+
     if (joinedGame.gameState != 0) { res.send({ status: "game is already started" }) }
 
+    else if (joiningPlayer) {
+        res.send({ status: "you already joined that game" })
+
+    }
     else {
         joinedGame.currentPlayers++;
 
@@ -59,10 +72,9 @@ async function joinGames(req, res) {
             data: joinedPlayer
         });
     }
-
 }
 
-async function getGames(res, next) {
+async function getGames(req, res, next) {
 
     const listGames = await Game.findAll();
 
@@ -91,7 +103,7 @@ async function getGamesById(req, res, next) {
     return next();
 }
 
-async function startGames(req, res) {
+async function startGames(req, res, next) {
 
     const gameId = req.params.id;
     const hostId = req.get('userId');
@@ -139,7 +151,7 @@ async function startGames(req, res) {
     }
 }
 
-async function revealCards(req, res) {
+async function revealCards(req, res, next) {
 
     const gameId = req.params.id;
     const userId = req.get('userId');
@@ -181,7 +193,14 @@ async function leaveGames(req, res, next) {
         }
     });
 
-    if (deleteId == leavingGame.UserId || leavingGame.currentPlayers == 0) {
+    const leavingPlayer = await Player.findOne({
+        where: {
+            UserId: deleteId,
+            GameId: leavingGame.id
+        }
+    });
+
+    if (deleteId == leavingGame.UserId) {
 
         await leavingGame.destroy();
 
@@ -189,7 +208,7 @@ async function leaveGames(req, res, next) {
 
         return next();
     }
-    else {
+    else if (leavingPlayer) {
 
         leavingGame.currentPlayers--;
 
@@ -204,10 +223,13 @@ async function leaveGames(req, res, next) {
 
         res.send({
             code: 'Success',
-            deletedplayer: deletePlayer
+            deletedPlayer: leavingPlayer
         });
 
         return next();
+    }
+    else {
+        res.send({ status: "you are not in that game" })
     }
 
 }
@@ -356,12 +378,9 @@ const CardSet = ["10_of_clubs",
 
 module.exports.getGames = getGames;
 module.exports.getGamesById = getGamesById;
-
 module.exports.createGames = createGames;
 module.exports.joinGames = joinGames;
-
 module.exports.startGames = startGames;
 module.exports.revealCards = revealCards;
-
 module.exports.leaveGames = leaveGames;
 module.exports.kickPlayer = kickPlayer;

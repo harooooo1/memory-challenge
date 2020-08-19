@@ -8,6 +8,8 @@ const GAMESMAP = {}
 
 //endpoints functions 
 
+//note to self: need to see in which functions do I need return next(); and in which ones I dont
+
 async function createGames(req, res, next) {
 
     const userId = req.get('userId');
@@ -131,7 +133,7 @@ async function startGames(req, res) {
             GAMESMAP[gameId] = await new GameModel(gameConfig);
             await GAMESMAP[gameId].startGame();
 
-            res.send({ code: "success", data: GAMESMAP[gameId].cards });
+            res.send({ code: "success", data: GAMESMAP[gameId].getCards() });
         }
 
     }

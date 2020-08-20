@@ -8,6 +8,9 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { GamesListComponent } from './components/games-list/games-list.component';
+import { GameContainerComponent } from './components/game-container/game-container.component';
+import { GameLobbyComponent } from './components/game-lobby/game-lobby.component';
+import { GameComponent } from './components/game/game.component';
 
 
 @NgModule({
@@ -16,6 +19,9 @@ import { GamesListComponent } from './components/games-list/games-list.component
     LoginComponent,
     HomeComponent,
     GamesListComponent,
+    GameContainerComponent,
+    GameLobbyComponent,
+    GameComponent,
   ],
   imports: [
     BrowserModule,

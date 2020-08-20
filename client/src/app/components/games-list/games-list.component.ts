@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { RestService } from "../../services/rest.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-games-list",
@@ -9,7 +10,7 @@ import { RestService } from "../../services/rest.service";
 export class GamesListComponent implements OnInit {
   public games = [];
 
-  constructor(private restService: RestService) {}
+  constructor(private restService: RestService, private router: Router) {}
 
   ngOnInit(): void {
     this.restService.getAllGames().subscribe((res: any) => {
@@ -31,6 +32,7 @@ export class GamesListComponent implements OnInit {
     this.restService.joinGameWithId(gameId).subscribe(
       (res) => {
         console.log("Success", res);
+        this.router.navigate(["games/" + gameId]);
       },
       (err) => {
         console.error("Failed to join game", err);

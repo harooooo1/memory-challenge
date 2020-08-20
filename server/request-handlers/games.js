@@ -116,7 +116,6 @@ async function startGames(req, res, next) {
             id: gameId,
         }
     });
-
     if (checkGame.gameState != 0) {
         res.send({ status: "game is already started" });
     }

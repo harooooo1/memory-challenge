@@ -12,6 +12,7 @@ const memory_challenge = new Sequelize("memory_challenge", "root", "adminadmin",
 
 // Model definition
 const User = memory_challenge.define("User", {
+
   id: {
     type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true
   },
@@ -25,10 +26,10 @@ const User = memory_challenge.define("User", {
   isBanned: Sequelize.BOOLEAN, // 0 or 1, default 0
   isAdmin: Sequelize.BOOLEAN, // 0 or 1, default 0
 
-
 });
 
 const Game = memory_challenge.define("Game", {
+
   id: {
     type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true
   },
@@ -37,12 +38,13 @@ const Game = memory_challenge.define("Game", {
   maxPlayers: Sequelize.INTEGER,
   gameState: Sequelize.TINYINT, // 0 - in lobby, 1 - started, 2 - finished
   winner: Sequelize.STRING, // who won
+
 });
 
 const Player = memory_challenge.define("Player", {
 
   playerNumber: Sequelize.INTEGER, //players number inside the game (example: player1, player2 etc....)
-  pairs: Sequelize.INTEGER,      // number of succesfully matched pairs a.k.a. score
+  playerName: Sequelize.STRING      // username pulled from user table
 
 });
 

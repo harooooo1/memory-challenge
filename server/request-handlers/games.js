@@ -1,3 +1,4 @@
+const User = require('../database-setup').User;
 const Game = require('../database-setup').Game;
 const Player = require('../database-setup').Player;
 const errs = require('./auth');
@@ -6,11 +7,40 @@ const { GameModel, CardState, GameState } = require("../game-model");
 //global vars
 const GAMESMAP = {}
 
+//need to see in which functions do I need return next(); and in which ones I dont
+//add endpoint for quitting Game and for update Score
+//forbid users from joining multiple games 
+
 //endpoints functions 
 
-//note to self: need to see in which functions do I need return next(); and in which ones I dont
+async function getGames(req, res, next) {
 
-//add endpoint for quitting Game, endpoint for resign, function for score updating in tables
+    const listGames = await Game.findAll();
+
+    res.send({
+        code: 'Success',
+        data: listGames
+    });
+
+    return next();
+}
+
+async function getGamesById(req, res, next) {
+    const gameId = req.params.id;
+    const listedGame = await Game.findOne({
+        where: {
+            id: gameId
+        }
+    });
+
+    res.send({
+        code: 'Success',
+        data: listedGame,
+        cards: GAMESMAP[gameId] && GAMESMAP[gameId].readCards()
+    });
+
+    return next();
+}
 
 async function createGames(req, res, next) {
 
@@ -76,35 +106,6 @@ async function joinGames(req, res, next) {
     }
 }
 
-async function getGames(req, res, next) {
-
-    const listGames = await Game.findAll();
-
-    res.send({
-        code: 'Success',
-        data: listGames
-    });
-
-    return next();
-}
-
-async function getGamesById(req, res, next) {
-    const gameId = req.params.id;
-    const listedGame = await Game.findOne({
-        where: {
-            id: gameId
-        }
-    });
-
-    res.send({
-        code: 'Success',
-        data: listedGame,
-        cards: GAMESMAP[gameId] && GAMESMAP[gameId].readCards()
-    });
-
-    return next();
-}
-
 async function startGames(req, res, next) {
 
     const gameId = req.params.id;
@@ -147,7 +148,7 @@ async function startGames(req, res, next) {
             GAMESMAP[gameId] = await new GameModel(gameConfig);
             await GAMESMAP[gameId].startGame();
 
-            res.send({ code: "success", data: GAMESMAP[gameId].getCards() });
+            res.send({ code: "success", data: GAMESMAP[gameId].readCards() });
         }
 
     }
@@ -285,10 +286,17 @@ async function kickPlayer(req, res, next) {
 
 async function makePlayer(game, userid) {
 
+    const userName = await User.findOne({
+        where: {
+            id: userid,
+        }
+    });
+
     const newPlayer = {
         playerNumber: game.currentPlayers - 1,
+        playerName: userName.username,
         GameId: game.id,
-        UserId: userid
+        UserId: userName.id
     };
 
     const player = await Player.create(newPlayer);
@@ -319,7 +327,6 @@ async function wait(time) {
         }, time);
     });
 }
-
 
 const CardSet = ["10_of_clubs",
     "10_of_diamonds",
@@ -375,8 +382,6 @@ const CardSet = ["10_of_clubs",
     "queen_of_hearts",
     "queen_of_spades",
     "red_joker"];
-
-//exporting endpoints
 
 module.exports.getGames = getGames;
 module.exports.getGamesById = getGamesById;

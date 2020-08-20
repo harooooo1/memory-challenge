@@ -5,7 +5,6 @@ console.log("HELLLO");
 
 // REQUEST HANDLERS IMPORT
 const AuthHandlers = require('./request-handlers/auth');
-const HelloHandlers = require("./request-handlers/hello");
 const GameHandlers = require("./request-handlers/games");
 const { ServiceUnavailableError } = require("restify-errors");
 // SERVER SETUP
@@ -48,10 +47,6 @@ server.post('/games/:id/leave', GameHandlers.leaveGames);
 server.post('/games/:id/reveal-card', GameHandlers.revealCards);
 
 server.post('/games/:id/kick', GameHandlers.kickPlayer);
-
-// HELLO
-server.head("/api/hello", HelloHandlers.list);
-server.get("/api/hello", HelloHandlers.list);
 
 // INIT SERVER
 server.listen(8080, () =>

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RestService } from "../../services/rest.service";
-import { Router } from "@angular/router";
+
 
 @Component({
   selector: 'app-game-container',
@@ -43,10 +43,8 @@ export class GameContainerComponent implements OnInit {
       (res) => {
 
         this.restService.getGameById(this.gameId).subscribe((res: any) => {
-          console.log("wat");
-          console.log({ game: res });
-          console.log("wat")
-          this.game = res; // is it ok??
+          this.game = res.data;
+          this.game.cards = res.cards;
 
         });
       },

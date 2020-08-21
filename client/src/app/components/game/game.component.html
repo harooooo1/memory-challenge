@@ -1,1 +1,11 @@
+<div class="container">
 <p>GAMEPLAY</p>
+<div class="row">
+    <div class="col-2 gamecard" *ngFor="let card of cards; let i = index" (click)="doRevealCard(gameId, i)">
+        <div *ngIf="card.identifier"> <img class="img-fluid" src="assets/cards/{{card.identifier}}.png" /> </div>
+        <div *ngIf="!card.identifier"> <img class="img-fluid" src="assets/cards/back.png" /> </div>
+    </div>
+
+</div>
+
+</div>

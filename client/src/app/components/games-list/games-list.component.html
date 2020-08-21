@@ -1,21 +1,29 @@
-<table class="table">
-  <tr>
-    <th>ID</th>
-    <th>Title</th>
-    <th>Players</th>
-    <th>Status</th>
+<div class="container">
+  <div class="row">
+    <h1> Games List </h1>
+    <div class="col-12">
+      <button class="btn btn-primary" (click)="createGame()"> Create Game </button>
+    </div>
+    <table class="table col-12">
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Players</th>
+        <th>Status</th>
 
-    <th></th>
-  </tr>
+        <th></th>
+      </tr>
 
-  <tr *ngFor="let game of games">
-    <td>{{ game.id }}</td>
-    <td>{{ game.title }}</td>
-    <td>{{ game.currentPlayers }} {{"/"}} {{ game.maxPlayers }}</td>
-    <td>{{ resolveState(game.gameState) }}</td>
-    <td>
-      <button class="btn-primary btn" (click)="joinGame(game.id)">Join</button>
-    </td>
-  </tr>
+      <tr *ngFor="let game of games">
+        <td>{{ game.id }}</td>
+        <td>{{ game.title }}</td>
+        <td>{{ game.currentPlayers }} {{"/"}} {{ game.maxPlayers }}</td>
+        <td>{{ resolveState(game.gameState) }}</td>
+        <td>
+          <button class="btn-primary btn" (click)="joinGame(game.id)">Join</button>
+        </td>
+      </tr>
 
-</table>
+    </table>
+  </div>
+</div>

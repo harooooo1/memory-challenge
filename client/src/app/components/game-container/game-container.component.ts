@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RestService } from "../../services/rest.service";
+import { flatMap } from 'rxjs/operators';
 
 
 @Component({
@@ -20,21 +21,17 @@ export class GameContainerComponent implements OnInit {
   constructor(private restService: RestService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.gameId = params['id'];
-
-      this.restService.getGameById(this.gameId).subscribe((res: any) => {
+    this.route.params
+      .pipe(
+        flatMap((params) => {
+          this.gameId = params['id'];
+          return this.restService.getGameById(this.gameId);
+        })
+      )
+      .subscribe((res: any) => {
         this.game = res.data;
-
-      });
-
-      console.log(this.gameId);
-
-    }
-    )
-
-
-
+        console.log(this.gameId);
+      })
   }
 
   handleGameStart() {
@@ -53,6 +50,16 @@ export class GameContainerComponent implements OnInit {
       }
     );
   }
-}
 
+  handleGameFinish() {
+
+    this.restService.getGameById(this.gameId).subscribe((res: any) => {
+      this.game = res.data;
+      this.game.cards = res.cards;
+
+    });
+
+  }
+
+}
 

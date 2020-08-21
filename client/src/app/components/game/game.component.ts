@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { RestService } from "../../services/rest.service";
 
 @Component({
@@ -8,22 +8,27 @@ import { RestService } from "../../services/rest.service";
 })
 
 export class GameComponent implements OnInit {
-
+  private gameRefreshInterval;
   private game;
   public cards = [];
   @Input() gameId;
+  @Output() gameFinished = new EventEmitter;
   constructor(private restService: RestService) { }
 
   ngOnInit(): void {
 
-    setInterval(() => {
+    this.gameRefreshInterval = setInterval(() => {
 
       this.restService.getGameById(this.gameId).subscribe((res: any) => {
         this.game = res.data;
         this.cards = res.cards;
         console.log("cards", this.cards);
         console.log("game", this.game);
+        if (this.game.gameState === 2) {
+          clearInterval(this.gameRefreshInterval);
+          this.gameFinished.next(true);
 
+        }
 
       });
 

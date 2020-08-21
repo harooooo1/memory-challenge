@@ -306,7 +306,7 @@ async function makePlayer(game, userid) {
 function getCards() {
     var CardSetCopy = [...CardSet];
     CardSetCopy.sort((a, b) => (Math.random() - 0.5));
-    CardSetCopy = CardSetCopy.slice(0, 9);
+    CardSetCopy = CardSetCopy.slice(0, 2);
     CardSetCopy = CardSetCopy.concat(CardSetCopy)
     CardSetCopy.sort((a, b) => (Math.random() - 0.5));
 

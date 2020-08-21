@@ -23,6 +23,13 @@ export class RestService {
     });
   }
 
+  createGame(title) {
+    return this.http.post(this.apiEndpoint + "games", {
+      title: title,
+    }, {
+      headers: { "x-auth-token": this.authService.getToken() },
+    });
+  }
   startGameWithId(id) {
     return this.http.post(this.apiEndpoint + "games/" + id + "/start", null, {
       headers: { "x-auth-token": this.authService.getToken() },

@@ -10,7 +10,7 @@ import { Router } from "@angular/router";
 export class GamesListComponent implements OnInit {
   public games = [];
 
-  constructor(private restService: RestService, private router: Router) {}
+  constructor(private restService: RestService, private router: Router) { }
 
   ngOnInit(): void {
     this.restService.getAllGames().subscribe((res: any) => {
@@ -39,4 +39,20 @@ export class GamesListComponent implements OnInit {
       }
     );
   }
-}
+
+  createGame() {
+
+    console.log("creating game ");
+    const gameTitle = "Game" + new Date();
+    this.restService.createGame(gameTitle).subscribe(
+      (res: any) => {
+        console.log("Success", res.data.id);
+        this.router.navigate(["games/" + res.data.id]);
+      },
+      (err) => {
+        console.error("Failed to join game", err);
+      }
+    );
+
+  }
+} 

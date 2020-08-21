@@ -5,7 +5,7 @@
 </div>
 
 <div *ngIf="game?.gameState === 1">
-    <app-game [gameId]=gameId> </app-game>
+    <app-game [gameId]=gameId (gameFinished)="handleGameFinish()"> </app-game>
 </div>
 
 <div *ngIf="game?.gameState === 2">

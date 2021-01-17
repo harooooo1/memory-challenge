@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const dataPopulators = require("./seed-data");
+//const dataPopulators = require("./seed-data");
 
 const memory_challenge = new Sequelize("memory_challenge", "root", "adminadmin", {
   host: "localhost",

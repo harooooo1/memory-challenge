@@ -1,0 +1,13 @@
+<p>GAME CONTAINER</p>
+
+<div *ngIf="game?.gameState === 0">
+    <app-game-lobby [game]=game (gameStarted)="handleGameStart()"> </app-game-lobby>
+</div>
+
+<div *ngIf="game?.gameState === 1">
+    <app-game [gameId]=gameId (gameFinished)="handleGameFinish()"> </app-game>
+</div>
+
+<div *ngIf="game?.gameState === 2">
+    Game finished
+</div>

@@ -1,5 +1,5 @@
 {
-  "name": "memory-challenge",
+  "name": "crime-alert",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,17 +12,18 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.0",
-    "bootstrap": "^4.5.2",
+    "bootstrap": "^4.6.0",
     "debug": "^4.3.1",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.1.0",
     "nodemon": "^2.0.4",
+    "rest": "^2.0.0",
     "restify": "^8.5.1",
     "restify-cors-middleware": "^1.1.1",
     "restify-errors": "^8.0.2",
     "restify-jwt-community": "^1.1.4",
-    "sequelize": "^6.3.3",
+    "sequelize": "^6.6.2",
     "sqlite3": "^5.0.0"
   }
 }

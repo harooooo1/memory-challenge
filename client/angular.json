@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "crime-alert": {
+    "memory-challenge": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/crime-alert",
+            "outputPath": "dist/memory-challenge",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -65,18 +65,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "crime-alert:build"
+            "browserTarget": "memory-challenge:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "crime-alert:build:production"
+              "browserTarget": "memory-challenge:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "crime-alert:build"
+            "browserTarget": "memory-challenge:build"
           }
         },
         "test": {
@@ -113,16 +113,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "crime-alert:serve"
+            "devServerTarget": "memory-challenge:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "crime-alert:serve:production"
+              "devServerTarget": "memory-challenge:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "crime-alert"
+  "defaultProject": "memory-challenge"
 }

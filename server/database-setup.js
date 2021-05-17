@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const dataPopulators = require("./seed-data");
 
-const memory_challenge = new Sequelize("memory_challenge", "root", "adminadmin", {
+const memory_challenge = new Sequelize("memory_challenge", "root", "haroorah1", {
   host: "localhost",
   dialect: "mysql",
   // dialect: "sqlite",
@@ -60,7 +60,7 @@ Game.belongsToMany(User, { through: Player });
 (async function () {
 
   const FORCE_RECREATE_MODELS = false;
-  const DO_SYNC = false;
+  const DO_SYNC = true;
 
   // Drop tables in order to avoid foreign key constraint issues
   if (FORCE_RECREATE_MODELS) {

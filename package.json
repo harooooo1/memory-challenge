@@ -25,6 +25,6 @@
     "restify-errors": "^8.0.2",
     "restify-jwt-community": "^1.1.4",
     "sequelize": "^6.3.3",
-    "sqlite3": "^5.0.0"
+    "sqlite3": "^5.0.3"
   }
 }
